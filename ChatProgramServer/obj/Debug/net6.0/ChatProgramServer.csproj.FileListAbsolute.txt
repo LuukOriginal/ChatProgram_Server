@@ -1,0 +1,15 @@
+C:\Development\ChatProgramServer\ChatProgramServer\bin\Debug\net6.0\ChatProgramServer.exe
+C:\Development\ChatProgramServer\ChatProgramServer\bin\Debug\net6.0\ChatProgramServer.deps.json
+C:\Development\ChatProgramServer\ChatProgramServer\bin\Debug\net6.0\ChatProgramServer.runtimeconfig.json
+C:\Development\ChatProgramServer\ChatProgramServer\bin\Debug\net6.0\ChatProgramServer.dll
+C:\Development\ChatProgramServer\ChatProgramServer\bin\Debug\net6.0\ChatProgramServer.pdb
+C:\Development\ChatProgramServer\ChatProgramServer\obj\Debug\net6.0\ChatProgramServer.csproj.AssemblyReference.cache
+C:\Development\ChatProgramServer\ChatProgramServer\obj\Debug\net6.0\ChatProgramServer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Development\ChatProgramServer\ChatProgramServer\obj\Debug\net6.0\ChatProgramServer.AssemblyInfoInputs.cache
+C:\Development\ChatProgramServer\ChatProgramServer\obj\Debug\net6.0\ChatProgramServer.AssemblyInfo.cs
+C:\Development\ChatProgramServer\ChatProgramServer\obj\Debug\net6.0\ChatProgramServer.csproj.CoreCompileInputs.cache
+C:\Development\ChatProgramServer\ChatProgramServer\obj\Debug\net6.0\ChatProgramServer.dll
+C:\Development\ChatProgramServer\ChatProgramServer\obj\Debug\net6.0\refint\ChatProgramServer.dll
+C:\Development\ChatProgramServer\ChatProgramServer\obj\Debug\net6.0\ChatProgramServer.pdb
+C:\Development\ChatProgramServer\ChatProgramServer\obj\Debug\net6.0\ChatProgramServer.genruntimeconfig.cache
+C:\Development\ChatProgramServer\ChatProgramServer\obj\Debug\net6.0\ref\ChatProgramServer.dll
