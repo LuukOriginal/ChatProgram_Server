@@ -1,13 +1,17 @@
-﻿using System.IO;
+﻿using ChatProgramServer.Models;
+using System.IO;
 using System.Net;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ChatProgramServer
 {
-    public class RegisterRoute : Route
+    public class UserRoute : Route
     {
+        private UserModel _user = new UserModel();
+
         public override bool CanHandle(string endpoint)
         {
-            return endpoint == "/register";
+            return endpoint == "/User";
         }
 
         public override void HandleRequest(HttpListenerRequest request, HttpListenerResponse response)
@@ -16,7 +20,15 @@ namespace ChatProgramServer
 
             if (request.HttpMethod == "GET")
             {
-                responseString = "hallo, maak een account";
+                responseString = "hier is een account";
+            }
+            else if (request.HttpMethod == "POST")
+            {
+                using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
+                {
+                    string data = reader.ReadToEnd();
+                    responseString = _user.CreateUser(data);
+                }
             }
             else
             {

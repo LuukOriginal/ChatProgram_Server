@@ -29,13 +29,11 @@ namespace ChatProgramServer
             }
         }
 
-        public void Set(string key, BsonDocument value) 
+        public void Set(BsonDocument value) 
         {
             try
             {
                 Collection.InsertOne(value);
-
-                Console.WriteLine(value["_id"].ToString());
             }
             catch (Exception ex)
             {

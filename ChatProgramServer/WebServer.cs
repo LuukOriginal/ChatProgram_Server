@@ -22,7 +22,7 @@ namespace ChatProgramServer
             routes.Add(new DefaultRoute());
             routes.Add(new TimeRoute());
             routes.Add(new DataRoute());
-            routes.Add(new RegisterRoute());
+            routes.Add(new UserRoute());
         }
 
         public void Start()
@@ -41,9 +41,17 @@ namespace ChatProgramServer
                 var request = context.Request;
                 var response = context.Response;
 
+                tempLog($"{request.HttpMethod} | {request.Url.AbsolutePath} | {request.RemoteEndPoint.ToString()}");
+
                 RouteHandler handler = FindRouteHandler(request.Url.AbsolutePath);
                 handler?.HandleRequest(request, response);
             }
+        }
+
+        public void tempLog(string message)
+        {
+            string time = DateTime.Now.ToString("HH:mm:ss");
+            Console.WriteLine($"[{time}] {message}");
         }
 
         public void Stop()

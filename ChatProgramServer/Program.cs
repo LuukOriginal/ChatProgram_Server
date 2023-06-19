@@ -8,20 +8,6 @@ namespace ChatProgramServer
     {
         static void Main(string[] args)
         {
-            BsonDocument user = new BsonDocument
-            {
-                { "username", "john.doe" },
-                { "email", "john.doe@example.com" },
-                { "age", 30 }
-            };
-
-            IConfiguration config = new ConfigurationBuilder()
-            .AddUserSecrets<Program>()
-            .Build();
-
-            Database db = new Database(config["DatabaseUri"]);
-            db.Set("test", user);
-
             WebServer server = new WebServer("http://localhost:8080/");
             server.RegisterRoutes();
             server.Start();

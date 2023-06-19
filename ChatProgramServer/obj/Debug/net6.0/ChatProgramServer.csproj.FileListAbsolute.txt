@@ -37,3 +37,4 @@ C:\Development\ChatProgramServer\ChatProgramServer\bin\Debug\net6.0\Microsoft.Ex
 C:\Development\ChatProgramServer\ChatProgramServer\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Physical.dll
 C:\Development\ChatProgramServer\ChatProgramServer\bin\Debug\net6.0\Microsoft.Extensions.FileSystemGlobbing.dll
 C:\Development\ChatProgramServer\ChatProgramServer\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
+C:\Development\ChatProgramServer\ChatProgramServer\bin\Debug\net6.0\Newtonsoft.Json.dll
