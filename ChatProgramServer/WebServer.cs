@@ -1,57 +1,81 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
-using System.Threading;
 
-class WebServer
+namespace ChatProgramServer
 {
-    private HttpListener listener;
-
-    public void Start(string baseUrl)
+    public class WebServer
     {
-        listener = new HttpListener();
-        listener.Prefixes.Add(baseUrl);
-        listener.Start();
-        Console.WriteLine("Web server started. Listening for requests...");
+        private HttpListener listener;
+        private string[] prefixes;
+        private List<Route> routes;
 
-        // Handle incoming requests
-        while (true)
+        public WebServer(params string[] prefixes)
         {
-            // Get the context of the incoming request
-            HttpListenerContext context = listener.GetContext();
-
-            // Process the request in a separate thread
-            ThreadPool.QueueUserWorkItem(ProcessRequest, context);
+            this.prefixes = prefixes;
+            this.routes = new List<Route>();
         }
-    }
 
-    public void Stop()
-    {
-        listener.Stop();
-        listener.Close();
-    }
+        public void RegisterRoutes()
+        {
+            // Add your route handlers here
+            routes.Add(new DefaultRoute());
+            routes.Add(new TimeRoute());
+            routes.Add(new DataRoute());
+            routes.Add(new RegisterRoute());
+        }
 
-    private void ProcessRequest(object state)
-    {
-        // Get the context from the state object
-        HttpListenerContext context = (HttpListenerContext)state;
+        public void Start()
+        {
+            listener = new HttpListener();
+            foreach (string prefix in prefixes)
+            {
+                listener.Prefixes.Add(prefix);
+            }
+            listener.Start();
+            Console.WriteLine("Listening for requests...");
 
-        // Extract the request and response objects
-        HttpListenerRequest request = context.Request;
-        HttpListenerResponse response = context.Response;
+            while (true)
+            {
+                var context = listener.GetContext();
+                var request = context.Request;
+                var response = context.Response;
 
-        // Create a response message
-        string responseString = "<html><body><h1>Hello, World!</h1></body></html>";
-        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+                RouteHandler handler = FindRouteHandler(request.Url.AbsolutePath);
+                handler?.HandleRequest(request, response);
+            }
+        }
 
-        // Set the content type and length of the response
-        response.ContentType = "text/html";
-        response.ContentLength64 = buffer.Length;
+        public void Stop()
+        {
+            if (listener != null && listener.IsListening)
+            {
+                listener.Stop();
+                listener.Close();
+            }
+        }
 
-        // Write the response
-        System.IO.Stream output = response.OutputStream;
-        output.Write(buffer, 0, buffer.Length);
+        private RouteHandler FindRouteHandler(string endpoint)
+        {
+            foreach (Route route in routes)
+            {
+                if (route.CanHandle(endpoint))
+                {
+                    return new RouteHandler(route);
+                }
+            }
+            return null;
+        }
 
-        // Close the output stream
-        output.Close();
+        public static void WriteResponse(HttpListenerResponse response, string responseString)
+        {
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+            response.ContentType = "text/plain";
+            response.ContentLength64 = buffer.Length;
+
+            var output = response.OutputStream;
+            output.Write(buffer, 0, buffer.Length);
+            output.Close();
+        }
     }
 }

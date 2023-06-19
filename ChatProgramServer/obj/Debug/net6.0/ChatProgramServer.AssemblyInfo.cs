@@ -11,6 +11,7 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("9c03db00-5e9e-4f5e-b8ee-201c3bf7f6b9")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChatProgramServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
