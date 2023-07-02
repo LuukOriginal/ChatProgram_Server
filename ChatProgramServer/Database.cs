@@ -7,10 +7,9 @@ namespace ChatProgramServer
     {
         IMongoCollection<BsonDocument> Collection;
 
-        public Database(string ConnectionUri) 
+        public Database(string ConnectionUri) //Initialize the database handler
         {
             var settings = MongoClientSettings.FromConnectionString(ConnectionUri);
-            // Set the ServerApi field of the settings object to Stable API version 1
             settings.ServerApi = new ServerApi(ServerApiVersion.V1);
             // Create a new client and connect to the server
             var client = new MongoClient(settings);
@@ -19,17 +18,23 @@ namespace ChatProgramServer
             Collection = UserDatabase.GetCollection<BsonDocument>("Users");
         }
 
-        public async void Get(string key)
+        public async Task<BsonDocument> Find(string key, string value) //finding values inside of the database
         {
-            Console.WriteLine("test");
-            var documents = await Collection.Find(new BsonDocument()).ToListAsync();
-            foreach (var document in documents)
+            var filter = Builders<BsonDocument>.Filter.Eq(key, value);
+
+            var user = await Collection.Find(filter).FirstOrDefaultAsync();
+
+            if (user != null)
             {
-                Console.WriteLine(document.ToString());
+                return user;
+            }
+            else
+            {
+                return new BsonDocument();
             }
         }
 
-        public void Set(BsonDocument value) 
+        public void Set(BsonDocument value) //set values inside of the database
         {
             try
             {

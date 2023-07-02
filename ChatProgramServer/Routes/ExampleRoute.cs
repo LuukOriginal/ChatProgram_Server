@@ -7,22 +7,19 @@ namespace ChatProgramServer
     {
         public override bool CanHandle(string endpoint)
         {
-            return endpoint == null;
+            //Returns if the route has the correct endpoint
+            return endpoint == "example";
         }
 
         public override void HandleRequest(HttpListenerRequest request, HttpListenerResponse response)
         {
             string responseString = string.Empty;
-
-            if (request.HttpMethod == "POST")
+            
+            if (request.HttpMethod == "GET") //handles the GET requests to this endpoint
             {
-                using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
-                {
-                    string requestBody = reader.ReadToEnd();
-                    responseString = $"Received data: {requestBody}";
-                }
+                responseString = "This is an Example!";
             }
-            else
+            else //Handles the requests not specified in this endpoint
             {
                 response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
                 responseString = "Method not allowed.";

@@ -1,40 +1,48 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
-using MongoDB.Driver;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChatProgramServer.Models
 {
     public class UserModel
     {
+        Database db;
         public UserModel() 
-        { 
-
-        }
-
-        public class User
-        {
-            string username;
-        }
-
-        public string CreateUser(string rData) 
         {
             IConfiguration config = new ConfigurationBuilder()
             .AddUserSecrets<Program>()
             .Build();
 
-            BsonDocument data = BsonSerializer.Deserialize<BsonDocument>(rData);
+            db = new Database(config["DatabaseUri"]); //set's up the database
+        }
 
-            Database db = new Database(config["DatabaseUri"]);
+        class User
+        {
+            public string username = "";
+            public string[] conversations = {};
+        }
+
+        public string CreateUser(string rData) //creates a new user in the database
+        {
+            User netData = JsonConvert.DeserializeObject<User>(rData);
+
+            BsonDocument data = netData.ToBsonDocument();
             db.Set(data);
 
             return data["_id"].ToString();
+        }
+
+        public async Task<string> GetUserFromName(string username) //Finds an user in the database
+        {
+            BsonDocument user = await db.Find("username", username);
+
+            if (user == null) return "";
+
+            var dotNetObj = BsonTypeMapper.MapToDotNetValue(user);
+            string userData =  JsonConvert.SerializeObject(dotNetObj);
+
+            return userData;
         }
 
     }

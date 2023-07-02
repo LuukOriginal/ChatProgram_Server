@@ -3,11 +3,11 @@ using System.Net;
 
 namespace ChatProgramServer
 {
-    public class DataRoute : Route
+    public class MessageRoute : Route
     {
         public override bool CanHandle(string endpoint)
         {
-            return endpoint == "/data";
+            return endpoint == "/messages";
         }
 
         public override void HandleRequest(HttpListenerRequest request, HttpListenerResponse response)
@@ -18,9 +18,14 @@ namespace ChatProgramServer
             {
                 using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
                 {
+                    //To be implemented
                     string requestBody = reader.ReadToEnd();
                     responseString = $"Received data: {requestBody}";
                 }
+            }
+            else if(request.HttpMethod == "GET")
+            {
+                //To be implemented
             }
             else
             {

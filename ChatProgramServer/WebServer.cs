@@ -18,15 +18,16 @@ namespace ChatProgramServer
 
         public void RegisterRoutes()
         {
-            // Add your route handlers here
+            // Route Handlers
             routes.Add(new DefaultRoute());
             routes.Add(new TimeRoute());
-            routes.Add(new DataRoute());
+            routes.Add(new MessageRoute());
             routes.Add(new UserRoute());
         }
 
         public void Start()
         {
+            //Sets up an httplistener to listen for incomming requests
             listener = new HttpListener();
             foreach (string prefix in prefixes)
             {
@@ -37,24 +38,33 @@ namespace ChatProgramServer
 
             while (true)
             {
-                var context = listener.GetContext();
-                var request = context.Request;
-                var response = context.Response;
+                try
+                {
+                    var context = listener.GetContext();
+                    var request = context.Request;
+                    var response = context.Response;
 
-                tempLog($"{request.HttpMethod} | {request.Url.AbsolutePath} | {request.RemoteEndPoint.ToString()}");
+                    tempLog($"{request.HttpMethod} | {request.Url.AbsolutePath} | {request.RemoteEndPoint.ToString()}");
 
-                RouteHandler handler = FindRouteHandler(request.Url.AbsolutePath);
-                handler?.HandleRequest(request, response);
+                    //Checks if any routes match with the specified route, and if so, handle them.
+                    RouteHandler handler = FindRouteHandler(request.Url.AbsolutePath);
+                    handler?.HandleRequest(request, response);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("[Error]: " + ex.Message);
+                }
             }
         }
 
         public void tempLog(string message)
         {
+            //Temporary function for logging something with the time included
             string time = DateTime.Now.ToString("HH:mm:ss");
             Console.WriteLine($"[{time}] {message}");
         }
 
-        public void Stop()
+        public void Stop() //stops the server
         {
             if (listener != null && listener.IsListening)
             {
@@ -63,11 +73,11 @@ namespace ChatProgramServer
             }
         }
 
-        private RouteHandler FindRouteHandler(string endpoint)
+        private RouteHandler FindRouteHandler(string endpoint) //checks what route matches with the specified endpoint
         {
             foreach (Route route in routes)
             {
-                if (route.CanHandle(endpoint))
+                if (route.CanHandle(endpoint.ToLower()))
                 {
                     return new RouteHandler(route);
                 }
@@ -75,7 +85,7 @@ namespace ChatProgramServer
             return null;
         }
 
-        public static void WriteResponse(HttpListenerResponse response, string responseString)
+        public static void WriteResponse(HttpListenerResponse response, string responseString) //function for responding back to the request
         {
             byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
             response.ContentType = "text/plain";

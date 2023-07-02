@@ -1,7 +1,5 @@
 ﻿using ChatProgramServer.Models;
-using System.IO;
 using System.Net;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ChatProgramServer
 {
@@ -11,16 +9,31 @@ namespace ChatProgramServer
 
         public override bool CanHandle(string endpoint)
         {
-            return endpoint == "/User";
+            return endpoint == "/user";
         }
 
-        public override void HandleRequest(HttpListenerRequest request, HttpListenerResponse response)
+        public override async void HandleRequest(HttpListenerRequest request, HttpListenerResponse response)
         {
             string responseString = string.Empty;
 
             if (request.HttpMethod == "GET")
             {
-                responseString = "hier is een account";
+                using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
+                {
+                    string data = reader.ReadToEnd();
+
+                    string userName = request.QueryString["username"];
+                    string userId = request.QueryString["userid"];
+
+                    if (userName != null && userName.Length > 0)
+                    {
+                        responseString = await _user.GetUserFromName(userName);
+                    }
+                    else if(userId != null && userId.Length > 0)
+                    {
+                        responseString = "Not implemented yet";
+                    }
+                }
             }
             else if (request.HttpMethod == "POST")
             {
